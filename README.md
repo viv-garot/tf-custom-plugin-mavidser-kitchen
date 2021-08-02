@@ -1,15 +1,13 @@
-# SkillMap-template
-Template for skillmap related tasks
+# tf-custom-plugin
 
 ## Description
-What the goal of this repo ?
+Learn how to run locally a custom plugin
 
 ## Pre-requirements
 
 * [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) 
-* [Terraform cli](https://learn.hashicorp.com/tutorials/terraform/install-cli)
-* c
-* d
+* [Vagrant](https://www.vagrantup.com/downloads)
+* [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 
 ## How to use this repo
 
@@ -22,13 +20,13 @@ What the goal of this repo ?
 ### Clone the repo
 
 ```
-git clone xxxxxx
+git clone https://github.com/viv-garot/tf-custom-plugin
 ```
 
 ### Change directory
 
 ```
-cd xxxxxx
+cd tf-custom-plugin
 ```
 
 ### Run
