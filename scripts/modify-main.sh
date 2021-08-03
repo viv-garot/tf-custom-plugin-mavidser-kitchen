@@ -4,17 +4,24 @@ cat >> /vagrant/main.tf << EOF
 
 terraform {
   required_providers {
-    extip = {
-      source = "localproviders/petems/extip"
+    macaddress = {
+      source = "ivoronin/macaddress"
+      version = "0.2.2"
     }
   }
 }
 
-data "extip" "external_ip_from_aws" {
-  resolver = "https://checkip.amazonaws.com/"
+resource "macaddress" "example_address" {
 }
 
-output "external_ip_from_aws" {
-  value = data.extip.external_ip_from_aws.ipaddress
+// Terraform Mikrotik Provider - https://github.com/ddelnano/terraform-provider-mikrotik
+resource "mikrotik_dhcp_lease" "example_lease" {
+  address    = "10.0.0.10"
+  macaddress = upper(macaddress.example_address.address)
+  comment    = "Example DHCP Lease"
+}
+
+output "macaddress" {
+  value      = mikrotic_dhcp_lease.example_lease
 }
 EOF
