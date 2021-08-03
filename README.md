@@ -93,7 +93,7 @@ Run 'do-release-upgrade' to upgrade to it.
 vagrant@vagrant:~$
 ```
 
-* Run the sample project:
+* Run the sample project (single null_resource):
 
 ```
 terraform -chdir=/vagrant init && terraform -chdir=/vagrant apply
