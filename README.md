@@ -138,26 +138,33 @@ _sample_
 
 ```
 vagrant@vagrant:~$ bash plugin.sh
-go: downloading github.com/petems/terraform-provider-extip v0.1.2
-go: downloading github.com/hashicorp/terraform-plugin-sdk v1.7.0
-go: downloading github.com/hashicorp/go-hclog v0.9.2
-go: downloading github.com/hashicorp/go-plugin v1.0.1
-go: downloading github.com/zclconf/go-cty v1.2.1
-go: downloading google.golang.org/grpc v1.23.0
+Cloning into 'terraform-provider-linux'...
+remote: Enumerating objects: 160, done.
+remote: Counting objects: 100% (7/7), done.
+remote: Compressing objects: 100% (6/6), done.
+remote: Total 160 (delta 0), reused 5 (delta 0), pack-reused 153
+Receiving objects: 100% (160/160), 65.14 KiB | 2.61 MiB/s, done.
+Resolving deltas: 100% (76/76), done.
+==> Checking that code complies with gofmt requirements...
+go install
+go: downloading github.com/hashicorp/terraform v0.12.6
+go: downloading github.com/hashicorp/go-hclog v0.0.0-20181001195459-61d530d6c27f
+go: downloading github.com/hashicorp/go-plugin v1.0.1-0.20190610192547-a1bc61569a26
 
 ## ...
 
-go: downloading google.golang.org/appengine v1.6.1
-go: downloading golang.org/x/sys v0.0.0-20190804053845-51ab0e2deafa
-go: downloading github.com/apparentlymart/go-cidr v1.0.1
-go: downloading github.com/google/uuid v1.1.1
-go: downloading github.com/googleapis/gax-go/v2 v2.0.5
+go: downloading github.com/posener/complete v1.2.1
+go: downloading golang.org/x/sys v0.0.0-20191029155521-f43be2a4598c
+go: downloading google.golang.org/genproto v0.0.0-20190201180003-4b09977fb922
+go: downloading github.com/satori/go.uuid v1.2.0
+go: downloading github.com/googleapis/gax-go v2.0.0+incompatible
+go: downloading github.com/googleapis/gax-go/v2 v2.0.3
 go: downloading github.com/mattn/go-colorable v0.1.1
-go: downloading github.com/google/go-cmp v0.3.1
-go: downloading go.opencensus.io v0.22.0
+go: downloading github.com/google/go-cmp v0.3.0
+go: downloading go.opencensus.io v0.18.0
+go: downloading golang.org/x/oauth2 v0.0.0-20190220154721-9b3c75971fc9
 go: downloading github.com/jmespath/go-jmespath v0.0.0-20180206201540-c2b33e8439af
-go: downloading github.com/hashicorp/golang-lru v0.5.1
-make: *** No rule to make target 'build'.  Stop.
+vagrant@vagrant:~$
 ```
 
 * Modify the terraform project to use the custom plugin
@@ -187,10 +194,15 @@ vagrant@vagrant:~$ terraform -chdir=/vagrant init && terraform -chdir=/vagrant a
 Initializing the backend...
 
 Initializing provider plugins...
-- Reusing previous version of localproviders/petems/extip from the dependency lock file
+- Finding localproviders/mavidser/linux versions matching "1.0.2"...
 - Reusing previous version of hashicorp/null from the dependency lock file
-- Using previously-installed localproviders/petems/extip v0.1.2
+- Installing localproviders/mavidser/linux v1.0.2...
+- Installed localproviders/mavidser/linux v1.0.2 (unauthenticated)
 - Using previously-installed hashicorp/null v3.1.0
+
+Terraform has made some changes to the provider dependency selections recorded
+in the .terraform.lock.hcl file. Review those changes and commit them to your
+version control system if they represent changes you intended to make.
 
 Terraform has been successfully initialized!
 
@@ -201,12 +213,45 @@ should now work.
 If you ever set or change modules or backend configuration for Terraform,
 rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
-null_resource.null: Refreshing state... [id=2606815751610571705]
+null_resource.null: Refreshing state... [id=3161630483811464142]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # linux_group.testgroup will be created
+  + resource "linux_group" "testgroup" {
+      + gid    = (known after apply)
+      + id     = (known after apply)
+      + name   = "testgroup"
+      + system = false
+    }
+
+  # linux_user.testuser1 will be created
+  + resource "linux_user" "testuser1" {
+      + gid    = (known after apply)
+      + id     = (known after apply)
+      + name   = "testuser1"
+      + system = false
+      + uid    = (known after apply)
+    }
+
+  # linux_user.testuser2 will be created
+  + resource "linux_user" "testuser2" {
+      + gid    = (known after apply)
+      + id     = (known after apply)
+      + name   = "testuser2"
+      + system = false
+      + uid    = (known after apply)
+    }
+
+Plan: 3 to add, 0 to change, 0 to destroy.
 
 Changes to Outputs:
-  + external_ip_from_aws = "80.115.14.173"
-
-You can apply this plan to save these new output values to the Terraform state, without changing any real infrastructure.
+  + testgroup-id = (known after apply)
+  + testuser1-id = (known after apply)
+  + testuser2-id = (known after apply)
 
 Do you want to perform these actions?
   Terraform will perform the actions described above.
@@ -214,12 +259,20 @@ Do you want to perform these actions?
 
   Enter a value: yes
 
+linux_group.testgroup: Creating...
+linux_group.testgroup: Creation complete after 0s [id=1001]
+linux_user.testuser1: Creating...
+linux_user.testuser2: Creating...
+linux_user.testuser2: Creation complete after 0s [id=1001]
+linux_user.testuser1: Creation complete after 0s [id=1002]
 
-Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-external_ip_from_aws = "80.115.14.173"
+testgroup-id = "1001"
+testuser1-id = "1002"
+testuser2-id = "1001"
 ```
 
 ### Cleanup
