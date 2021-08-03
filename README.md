@@ -31,7 +31,7 @@ cd tf-custom-plugin
 
 ### Run
 
-* Create the vagrant box:
+* Create the Virtualbox VM from VagrantFile:
 
 ```
 vagrant up
@@ -160,7 +160,7 @@ go: downloading github.com/hashicorp/golang-lru v0.5.1
 make: *** No rule to make target 'build'.  Stop.
 ```
 
-* Modify the terraform project to add the custom plugin resource
+* Modify the terraform project to use the custom plugin
 
 ```
 bash modify-main.sh
@@ -224,7 +224,7 @@ external_ip_from_aws = "80.115.14.173"
 
 ### Cleanup
 
-* logoff from the VM
+* Disconnect from the VM
 
 ```
 exit
