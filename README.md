@@ -20,13 +20,13 @@
 ### Clone the repo
 
 ```
-git clone https://github.com/viv-garot/tf-custom-plugin
+git clone https://github.com/viv-garot/tf-custom-plugin-ivoronin
 ```
 
 ### Change directory
 
 ```
-cd tf-custom-plugin
+cd tf-custom-plugin-ivoronin
 ```
 
 ### Run
