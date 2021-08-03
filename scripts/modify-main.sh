@@ -4,24 +4,44 @@ cat >> /vagrant/main.tf << EOF
 
 terraform {
   required_providers {
-    macaddress = {
-      source = "ivoronin/macaddress"
-      version = "0.2.2"
+    linux = {
+      source  = "localproviders/mavidser/linux"
+      version = "1.0.2"
     }
   }
 }
 
-resource "macaddress" "example_address" {
+provider "linux" {
+  host = "localhost"
+  user = "vagrant"
 }
 
-// Terraform Mikrotik Provider - https://github.com/ddelnano/terraform-provider-mikrotik
-resource "mikrotik_dhcp_lease" "example_lease" {
-  address    = "10.0.0.10"
-  macaddress = upper(macaddress.example_address.address)
-  comment    = "Example DHCP Lease"
+resource "linux_group" "testgroup" {
+  name   = "testgroup"
+  system = false
 }
 
-output "macaddress" {
-  value      = mikrotic_dhcp_lease.example_lease
+resource "linux_user" "testuser1" {
+  name   = "testuser1"
+  gid    = linux_group.testgroup.gid
+  system = false
+}
+
+resource "linux_user" "testuser2" {
+  name   = "testuser2"
+  gid    = linux_group.testgroup.gid
+  system = false
+}
+
+output "testgroup-id" {
+  value = linux_group.testgroup.id
+}
+
+output "testuser1-id" {
+  value = linux_user.testuser1.id
+}
+
+output "testuser2-id" {
+  value = linux_user.testuser2.id
 }
 EOF
