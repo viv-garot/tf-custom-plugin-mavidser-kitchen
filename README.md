@@ -2,7 +2,6 @@
 
 ## Description
 * Learn how to run locally a custom plugin.
-* Based on [repo](https://github.com/antonakv/tf-ob-custom-plugin) of Anton Akulov
 
 ## Pre-requirements
 
