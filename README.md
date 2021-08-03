@@ -1,7 +1,7 @@
 # tf-custom-plugin
 
 ## Description
-* Learn how to run locally a custom plugin.
+* Learn how to run locally a custom plugin. ([terraform-linux-plugin](https://github.com/mavidser/terraform-provider-linux) from mavidser)
 
 ## Pre-requirements
 
