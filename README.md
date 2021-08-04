@@ -30,69 +30,118 @@ git clone https://github.com/viv-garot/tf-custom-plugin-mavidser-kitchen
 cd tf-custom-plugin-mavidser-kitchen
 ```
 
-### Run
+### Create the
 
-* Create the Virtualbox VM from VagrantFile:
+* Run the add-box.sh scripts. (This will create a VM from the Vagrantfile, package it and create a re-usable box from it).
+> This operation takes several minutes
 
 ```
-vagrant up
+bash scripts/add-box.sh
 ```
 
 _sample_:
 
 ```
-vagrant up
-Bringing machine 'default' up with 'virtualbox' provider...
-==> default: Importing base box 'vivien/bionic64'...
-==> default: Matching MAC address for NAT networking...
-==> default: Checking if box 'vivien/bionic64' version '21.07.06' is up to date...
-==> default: Setting the name of the VM: tf-custom-plugin_default_1627977553419_90086
-==> default: Clearing any previously set network interfaces...
-==> default: Preparing network interfaces based on configuration...
-    default: Adapter 1: nat
-==> default: Forwarding ports...
-    default: 22 (guest) => 2222 (host) (adapter 1)
-==> default: Booting VM...
-==> default: Waiting for machine to boot. This may take a few minutes...
-    default: SSH address: 127.0.0.1:2222
-    default: SSH username: vagrant
-    default: SSH auth method: private key
-    default:
-    default: Vagrant
+bash scripts/add-box.sh
+Bringing machine 'tf-plugin-bionic' up with 'virtualbox' provider...
+==> tf-plugin-bionic: Importing base box 'vivien/bionic64'...
+==> tf-plugin-bionic: Matching MAC address for NAT networking...
+==> tf-plugin-bionic: Checking if box 'vivien/bionic64' version '21.07.06' is up to date...
+==> tf-plugin-bionic: Setting the name of the VM: tf-plugin-bionic
+==> tf-plugin-bionic: Clearing any previously set network interfaces...
+==> tf-plugin-bionic: Preparing network interfaces based on configuration...
+    tf-plugin-bionic: Adapter 1: nat
+==> tf-plugin-bionic: Forwarding ports...
+    tf-plugin-bionic: 22 (guest) => 2222 (host) (adapter 1)
+==> tf-plugin-bionic: Booting VM...
+==> tf-plugin-bionic: Waiting for machine to boot. This may take a few minutes...
+    tf-plugin-bionic: SSH address: 127.0.0.1:2222
     
 ## ....
-
-    default: go: downloading github.com/gofrs/uuid v3.3.0+incompatible
-    default: go: downloading github.com/dylanmei/iso8601 v0.1.0
-    default: go: downloading github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
-    default: go: downloading github.com/hashicorp/golang-lru v0.5.1
-    default: go: downloading github.com/masterzen/simplexml v0.0.0-20190410153822-31eea3082786
-==> default: Running provisioner: file...
-    default: scripts/modify-main.sh => /home/vagrant/modify-main.sh
-==> default: Running provisioner: file...
-    default: scripts/plugin.sh => /home/vagrant/plugin.sh
+==> tf-plugin-bionic: Attempting graceful shutdown of VM...
+==> tf-plugin-bionic: Clearing any previously set forwarded ports...
+==> tf-plugin-bionic: Exporting VM...
+==> tf-plugin-bionic: Compressing package to: /Users/viviengarot/Desktop/VisualCode/skillsmap/TF/tf-custom-plugin-mavidser-kitchen/tf-plugin-bionic.box
+==> box: Box file was not detected as metadata. Adding it directly...
+==> box: Adding box 'tf-plugin-bionic' (v0) for provider:
+    box: Unpacking necessary files from: file:///Users/viviengarot/Desktop/VisualCode/skillsmap/TF/tf-custom-plugin-mavidser-kitchen/tf-plugin-bionic.box
+==> box: Successfully added box 'tf-plugin-bionic' (v0) for 'virtualbox'!
+==> tf-plugin-bionic: Destroying VM and associated drives...
 ```
 
-* Connect to the VM:
+
+### Ruby installation
+
+Install Ruby 2.6.6
 
 ```
-vagrant ssh
+rbenv install -l
+rbenv install 2.6.6
+rbenv local 2.6.6
+```
+
+### Install required RubyGems dependencies locally
+
+```
+bundle install --path vendor/bundle
+```
+
+### Test-kitchen
+
+* Converge the VM
+
+```
+bundle exec kitchen converge
 ```
 
 _sample_:
 
 ```
-vagrant ssh
-Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 4.15.0-147-generic x86_64)
+⏚ [viviengarot:~/Desktop/ … smap/TF/tf-custom-plugin-mavidser-kitchen] main(+267/-3)* 7m25s ± bundle exec kitchen converge
+-----> Starting Test Kitchen (v3.0.0)
+-----> Creating <default-tf-plugin-bionic>...
+       Bringing machine 'default' up with 'virtualbox' provider...
+       ==> default: Importing base box 'tf-plugin-bionic'...
+==> default: Matching MAC address for NAT networking...
+       ==> default: Setting the name of the VM: kitchen-tf-custom-plugin-mavidser-kitchen-default-tf-plugin-bionic-c3c1845e-55d9-4dde-a277-c0d9ed213152
+       ==> default: Clearing any previously set network interfaces...
+       ==> default: Preparing network interfaces based on configuration...
+           default: Adapter 1: nat
+       ==> default: Forwarding ports...
+           default: 22 (guest) => 2222 (host) (adapter 1)
+       ==> default: Running 'pre-boot' VM customizations...
+       ==> default: Booting VM...
+       ==> default: Waiting for machine to boot. This may take a few minutes...
+           default: SSH address: 127.0.0.1:2222
+           default: SSH username: vagrant
+           default: SSH auth method: private key
+           default:
+           default: Vagrant insecure key detected. Vagrant will automatically replace
+           default: this with a newly generated keypair for better security.
+           default:
+           default: Inserting generated public key within guest...
+           default: Removing insecure key from the guest if it's present...
+           default: Key inserted! Disconnecting and reconnecting using new SSH key...
+       ==> default: Machine booted and ready!
+       ==> default: Checking for guest additions in VM...
+       ==> default: Setting hostname...
+       ==> default: Machine not provisioned because `--no-provision` is specified.
+       [SSH] Established
+       Vagrant instance <default-tf-plugin-bionic> created.
+       Finished creating <default-tf-plugin-bionic> (0m56.85s).
+-----> Converging <default-tf-plugin-bionic>...
+       Preparing files for transfer
+       Preparing script
+       No provisioner script file specified, skipping
+       Transferring files to <default-tf-plugin-bionic>
+       Downloading files from <default-tf-plugin-bionic>
+       Finished converging <default-tf-plugin-bionic> (0m0.01s).
+-----> Test Kitchen is finished. (0m58.14s)
 
- * Documentation:  https://help.ubuntu.com
- * Management:     https://landscape.canonical.com
- * Support:        https://ubuntu.com/advantage
-New release '20.04.2 LTS' available.
-Run 'do-release-upgrade' to upgrade to it.
 
-vagrant@vagrant:~$
-```
+
+
+
 
 * Run the sample project (single null_resource):
 
