@@ -2,6 +2,7 @@
 
 ## Description
 * Learn how to run locally a custom plugin. ([terraform-linux-plugin](https://github.com/mavidser/terraform-provider-linux) from mavidser)
+* Test it with kitchen-terraform
 
 ## Pre-requirements
 
@@ -20,13 +21,13 @@
 ### Clone the repo
 
 ```
-git clone https://github.com/viv-garot/tf-custom-plugin-mavidser
+git clone https://github.com/viv-garot/tf-custom-plugin-mavidser-kitchen
 ```
 
 ### Change directory
 
 ```
-cd tf-custom-plugin-mavidser
+cd tf-custom-plugin-mavidser-kitchen
 ```
 
 ### Run
