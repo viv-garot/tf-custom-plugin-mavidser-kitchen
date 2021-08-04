@@ -1,8 +1,7 @@
-# tf-custom-plugin
+# tf-custom-plugin-mavidser-kitchen
 
 ## Description
-* Learn how to run locally a custom plugin. ([terraform-linux-plugin](https://github.com/mavidser/terraform-provider-linux) from mavidser)
-* Test it with kitchen-terraform
+* Learn how to run locally a custom plugin ([terraform-linux-plugin](https://github.com/mavidser/terraform-provider-linux) from mavidser) with kitchen-test
 
 ## Pre-requirements
 
@@ -30,10 +29,10 @@ git clone https://github.com/viv-garot/tf-custom-plugin-mavidser-kitchen
 cd tf-custom-plugin-mavidser-kitchen
 ```
 
-### Create the
+### Create the Vagrant box with Terraform and Goland provisioned, and the custom plugin compiled.
 
-* Run the add-box.sh scripts. (This will create a VM from the Vagrantfile, package it and create a re-usable box from it).
-> This operation takes several minutes
+* Run the add-box.sh scripts. (This will create a VM from the Vagrantfile, package it and finally create a suitable re-usable box required for test kitchen ).
+> Note : This operation takes several minutes
 
 ```
 bash scripts/add-box.sh
@@ -86,9 +85,51 @@ rbenv local 2.6.6
 bundle install --path vendor/bundle
 ```
 
-### Test-kitchen
+_sample_:
 
-* Converge the VM
+```
+bundle install --path vendor/bundle
+Fetching gem metadata from https://rubygems.org/........
+Fetching gem metadata from https://rubygems.org/.
+Resolving dependencies....
+Fetching concurrent-ruby 1.1.9
+Installing concurrent-ruby 1.1.9
+Fetching i18n 1.8.10
+Installing i18n 1.8.10
+Fetching minitest 5.14.4
+Installing minitest 5.14.4
+Fetching tzinfo 2.0.4
+Installing tzinfo 2.0.4
+Fetching zeitwerk 2.4.2
+Installing zeitwerk 2.4.2
+
+## ...
+
+Installing kitchen-vagrant 1.9.0
+Bundle complete! 4 Gemfile dependencies, 186 gems now installed.
+Bundled gems are installed into `./vendor/bundle`
+Post-install message from rubyzip:
+RubyZip 3.0 is coming!
+**********************
+
+The public API of some Rubyzip classes has been modernized to use named
+parameters for optional arguments. Please check your usage of the
+following classes:
+  * `Zip::File`
+  * `Zip::Entry`
+  * `Zip::InputStream`
+  * `Zip::OutputStream`
+
+Please ensure that your Gemfiles and .gemspecs are suitably restrictive
+to avoid an unexpected breakage when 3.0 is released (e.g. ~> 2.3.0).
+See https://github.com/rubyzip/rubyzip for details. The Changelog also
+lists other enhancements and bugfixes that have been implemented since
+version 2.3.0.
+```
+
+### Test kitchen
+
+* Bring up the test kitchen environment
 
 ```
 bundle exec kitchen converge
@@ -137,193 +178,23 @@ _sample_:
        Downloading files from <default-tf-plugin-bionic>
        Finished converging <default-tf-plugin-bionic> (0m0.01s).
 -----> Test Kitchen is finished. (0m58.14s)
+```
 
-
-
-
-
-
-* Run the sample project (single null_resource):
+* Check the instance (a.k.a platform defined in the kitchen.yml)
 
 ```
-terraform -chdir=/vagrant init && terraform -chdir=/vagrant apply
+bundle exec kitchen list
 ```
 
 _sample_:
 
 ```
-vagrant@vagrant:~$ terraform -chdir=/vagrant init && terraform -chdir=/vagrant apply
-
-Initializing the backend...
-
-Initializing provider plugins...
-- Reusing previous version of hashicorp/null from the dependency lock file
-- Using previously-installed hashicorp/null v3.1.0
-
-Terraform has been successfully initialized!
-
-You may now begin working with Terraform. Try running "terraform plan" to see
-any changes that are required for your infrastructure. All Terraform commands
-should now work.
-
-If you ever set or change modules or backend configuration for Terraform,
-rerun this command to reinitialize your working directory. If you forget, other
-commands will detect it and remind you to do so if necessary.
-null_resource.null: Refreshing state... [id=2606815751610571705]
-
-No changes. Your infrastructure matches the configuration.
-
-Terraform has compared your real infrastructure against your configuration and found no differences, so no changes are needed.
-
-Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+bundle exec kitchen list
+Instance                  Driver   Provisioner  Verifier  Transport  Last Action  Last Error
+default-tf-plugin-bionic  Vagrant  Shell        Inspec    Ssh        Converged    <None>
 ```
 
-* Compile the custom plugin
-
-```
-bash plugin.sh
-```
-
-_sample_
-
-```
-vagrant@vagrant:~$ bash plugin.sh
-Cloning into 'terraform-provider-linux'...
-remote: Enumerating objects: 160, done.
-remote: Counting objects: 100% (7/7), done.
-remote: Compressing objects: 100% (6/6), done.
-remote: Total 160 (delta 0), reused 5 (delta 0), pack-reused 153
-Receiving objects: 100% (160/160), 65.14 KiB | 2.61 MiB/s, done.
-Resolving deltas: 100% (76/76), done.
-==> Checking that code complies with gofmt requirements...
-go install
-go: downloading github.com/hashicorp/terraform v0.12.6
-go: downloading github.com/hashicorp/go-hclog v0.0.0-20181001195459-61d530d6c27f
-go: downloading github.com/hashicorp/go-plugin v1.0.1-0.20190610192547-a1bc61569a26
-
-## ...
-
-go: downloading github.com/posener/complete v1.2.1
-go: downloading golang.org/x/sys v0.0.0-20191029155521-f43be2a4598c
-go: downloading google.golang.org/genproto v0.0.0-20190201180003-4b09977fb922
-go: downloading github.com/satori/go.uuid v1.2.0
-go: downloading github.com/googleapis/gax-go v2.0.0+incompatible
-go: downloading github.com/googleapis/gax-go/v2 v2.0.3
-go: downloading github.com/mattn/go-colorable v0.1.1
-go: downloading github.com/google/go-cmp v0.3.0
-go: downloading go.opencensus.io v0.18.0
-go: downloading golang.org/x/oauth2 v0.0.0-20190220154721-9b3c75971fc9
-go: downloading github.com/jmespath/go-jmespath v0.0.0-20180206201540-c2b33e8439af
-vagrant@vagrant:~$
-```
-
-* Modify the terraform project to use the custom plugin
-
-```
-bash modify-main.sh
-```
-
-_sample_:
-
-```
-vagrant@vagrant:~$ bash modify-main.sh
-vagrant@vagrant:~$
-```
-
-* Initialize and apply again
-
-```
-terraform -chdir=/vagrant init && terraform -chdir=/vagrant apply
-```
-
-_sample_:
-
-```
-vagrant@vagrant:~$ terraform -chdir=/vagrant init && terraform -chdir=/vagrant apply
-
-Initializing the backend...
-
-Initializing provider plugins...
-- Finding localproviders/mavidser/linux versions matching "1.0.2"...
-- Reusing previous version of hashicorp/null from the dependency lock file
-- Installing localproviders/mavidser/linux v1.0.2...
-- Installed localproviders/mavidser/linux v1.0.2 (unauthenticated)
-- Using previously-installed hashicorp/null v3.1.0
-
-Terraform has made some changes to the provider dependency selections recorded
-in the .terraform.lock.hcl file. Review those changes and commit them to your
-version control system if they represent changes you intended to make.
-
-Terraform has been successfully initialized!
-
-You may now begin working with Terraform. Try running "terraform plan" to see
-any changes that are required for your infrastructure. All Terraform commands
-should now work.
-
-If you ever set or change modules or backend configuration for Terraform,
-rerun this command to reinitialize your working directory. If you forget, other
-commands will detect it and remind you to do so if necessary.
-null_resource.null: Refreshing state... [id=3161630483811464142]
-
-Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-  + create
-
-Terraform will perform the following actions:
-
-  # linux_group.testgroup will be created
-  + resource "linux_group" "testgroup" {
-      + gid    = (known after apply)
-      + id     = (known after apply)
-      + name   = "testgroup"
-      + system = false
-    }
-
-  # linux_user.testuser1 will be created
-  + resource "linux_user" "testuser1" {
-      + gid    = (known after apply)
-      + id     = (known after apply)
-      + name   = "testuser1"
-      + system = false
-      + uid    = (known after apply)
-    }
-
-  # linux_user.testuser2 will be created
-  + resource "linux_user" "testuser2" {
-      + gid    = (known after apply)
-      + id     = (known after apply)
-      + name   = "testuser2"
-      + system = false
-      + uid    = (known after apply)
-    }
-
-Plan: 3 to add, 0 to change, 0 to destroy.
-
-Changes to Outputs:
-  + testgroup-id = (known after apply)
-  + testuser1-id = (known after apply)
-  + testuser2-id = (known after apply)
-
-Do you want to perform these actions?
-  Terraform will perform the actions described above.
-  Only 'yes' will be accepted to approve.
-
-  Enter a value: yes
-
-linux_group.testgroup: Creating...
-linux_group.testgroup: Creation complete after 0s [id=1001]
-linux_user.testuser1: Creating...
-linux_user.testuser2: Creating...
-linux_user.testuser2: Creation complete after 0s [id=1001]
-linux_user.testuser1: Creation complete after 0s [id=1002]
-
-Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
-
-Outputs:
-
-testgroup-id = "1001"
-testuser1-id = "1002"
-testuser2-id = "1001"
-```
+* We are finally able to excecute the tests (configured in test/integration/default/check-plugin.rb)
 
 ### Cleanup
 
