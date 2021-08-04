@@ -45,3 +45,5 @@ output "testuser2-id" {
   value = linux_user.testuser2.id
 }
 EOF
+
+cp /vagrant/main.tf ~/main.tf
