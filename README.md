@@ -1,7 +1,7 @@
 # tf-custom-plugin-mavidser-kitchen
 
 ## Description
-* Learn how to run locally a custom plugin ([terraform-linux-plugin](https://github.com/mavidser/terraform-provider-linux) from mavidser) with kitchen-test
+* Learn how to run locally a custom plugin ([terraform-linux-plugin](https://github.com/mavidser/terraform-provider-linux) from mavidser) and test it with test kitchen
 
 ## Pre-requirements
 
@@ -12,8 +12,9 @@
 ## How to use this repo
 
 - Clone
-- Run
-- Cleanup
+- Build the testing instance
+- Install Ruby and gem dependencies
+- Run test kitchen
 
 ---
 
@@ -180,7 +181,7 @@ _sample_:
 -----> Test Kitchen is finished. (0m58.14s)
 ```
 
-* Check the instance (a.k.a platform defined in the kitchen.yml)
+* Check the instance (a.k.a platform defined in the kitchen.yml) configuration
 
 ```
 bundle exec kitchen list
@@ -194,35 +195,66 @@ Instance                  Driver   Provisioner  Verifier  Transport  Last Action
 default-tf-plugin-bionic  Vagrant  Shell        Inspec    Ssh        Converged    <None>
 ```
 
-* We are finally able to excecute the tests (configured in test/integration/default/check-plugin.rb)
-
-### Cleanup
-
-* Disconnect from the VM
+* We are finally able to excecute the tests (defined in test/integration/default/check-plugin.rb)
 
 ```
-exit
+bundle exec kitchen verify
+```
+
+_sample_:
+```
+bundle exec kitchen verify
+-----> Starting Test Kitchen (v3.0.0)
+-----> Setting up <default-tf-plugin-bionic>...
+       Finished setting up <default-tf-plugin-bionic> (0m0.00s).
+-----> Verifying <default-tf-plugin-bionic>...
+       Loaded tests from {:path=>".Users.viviengarot.Desktop.VisualCode.skillsmap.TF.to-remove.tf-custom-plugin-mavidser-kitchen.test.integration.default"}
+
+Profile: tests from {:path=>"/Users/viviengarot/Desktop/VisualCode/skillsmap/TF/to-remove/tf-custom-plugin-mavidser-kitchen/test/integration/default"} (tests from {:path=>".Users.viviengarot.Desktop.VisualCode.skillsmap.TF.to-remove.tf-custom-plugin-mavidser-kitchen.test.integration.default"})
+Version: (not specified)
+Target:  ssh://vagrant@127.0.0.1:2222
+
+  File /home/vagrant/.terraform.d/plugins/localproviders/mavidser/linux/1.0.2/linux_amd64/terraform-provider-linux
+     ✔  is expected to exist
+     ✔  md5sum is expected to eq "f46802e787ae030a81a5db01d9ae254f"
+     ✔  size is expected to eq 24120848
+     ✔  type is expected to eq :file
+     ✔  owner is expected to eq "vagrant"
+     ✔  group is expected to eq "vagrant"
+  Command: `terraform init --upgrade=true && terraform apply --auto-approve=true`
+     ✔  stdout is expected to match /testgroup-id = "1001"/
+     ✔  stdout is expected to match /testuser1-id = "1001"/
+     ✔  stdout is expected to match /testuser2-id = "1002"/
+
+Test Summary: 9 successful, 0 failures, 0 skipped
+       Finished verifying <default-tf-plugin-bionic> (0m7.41s).
+-----> Test Kitchen is finished. (0m8.50s)
+```
+
+* Cleanup
+
+```
+bundle exec kitchen destroy
 ```
 
 _sample_:
 
 ```
-vagrant@vagrant:~$ exit
-logout
-Connection to 127.0.0.1 closed.
+bundle exec kitchen destroy
+-----> Starting Test Kitchen (v3.0.0)
+-----> Destroying <default-tf-plugin-bionic>...
+       ==> default: Forcing shutdown of VM...
+       ==> default: Destroying VM and associated drives...
+       Vagrant instance <default-tf-plugin-bionic> destroyed.
+       Finished destroying <default-tf-plugin-bionic> (0m4.32s).
+-----> Test Kitchen is finished. (0m5.29s).
 ```
 
-* Destroy the VM
+
+* _Optionsal_ - Test kitchen note
+
+Instead of running the kitchen subcommands (converge, verify, destroy) individually, you can run them all at once with :
 
 ```
-vagrant destroy
-````
-
-_sample_:
-
-```
-vagrant destroy
-    default: Are you sure you want to destroy the 'default' VM? [y/N] y
-==> default: Forcing shutdown of VM...
-==> default: Destroying VM and associated drives...
+bundle exec kitchen test
 ```
