@@ -251,7 +251,7 @@ bundle exec kitchen destroy
 ```
 
 
-* _Optionsal_ - Test kitchen note
+* _Optional_ - Test kitchen note
 
 Instead of running the kitchen subcommands (converge, verify, destroy) individually, you can run them all at once with :
 
