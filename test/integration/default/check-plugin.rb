@@ -8,7 +8,7 @@ describe file('/home/vagrant/.terraform.d/plugins/localproviders/mavidser/linux/
 end
 
 describe command('terraform init --upgrade=true && terraform apply --auto-approve=true') do
-  its('stdout') {should match /testgroup-id = "1001"/ }
-  its('stdout') {should match /testuser1-id = "1001"/ }
-  its('stdout') {should match /testuser2-id = "1002"/ }
+  its('stdout') {should match /testgroup-id = "100[0-9]"/ }
+  its('stdout') {should match /testuser1-id = "100[0-9]"/ }
+  its('stdout') {should match /testuser2-id = "100[0-9]"/ }
 end
