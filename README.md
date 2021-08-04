@@ -32,7 +32,7 @@ cd tf-custom-plugin-mavidser-kitchen
 
 ### Create the Vagrant box with Terraform and Goland provisioned, and the custom plugin compiled.
 
-* Run the add-box.sh scripts. (This will create a VM from the Vagrantfile, package it and finally create a suitable re-usable box required for test kitchen ).
+* Run the add-box.sh scripts. (This will create a virtualbox VM from the Vagrantfile, package it and finally create a suitable re-usable box required for test kitchen ).
 > Note : This operation takes several minutes
 
 ```
