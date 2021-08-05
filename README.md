@@ -30,9 +30,9 @@ git clone https://github.com/viv-garot/tf-custom-plugin-mavidser-kitchen
 cd tf-custom-plugin-mavidser-kitchen
 ```
 
-### Create the Vagrant box with Terraform and Goland provisioned, and the custom plugin compiled.
+### Create the Vagrant box with Terraform and Golang provisioned, and the custom plugin compiled.
 
-* Run the add-box.sh scripts. (This will create a virtualbox VM from the Vagrantfile, package it and finally create a suitable re-usable box required for test kitchen ).
+* Run the add-box.sh scripts. (This will create a virtualbox VM from the Vagrantfile, package it and finally create a suitable re-usable box for test kitchen).
 > Note : This operation takes several minutes
 
 ```
@@ -130,7 +130,7 @@ version 2.3.0.
 
 ### Test kitchen
 
-* Bring up the test kitchen environment
+* Bring up the test kitchen instance (platform defined in the kitchen.yml)
 
 ```
 bundle exec kitchen converge
@@ -181,7 +181,7 @@ _sample_:
 -----> Test Kitchen is finished. (0m58.14s)
 ```
 
-* Check the instance (a.k.a platform defined in the kitchen.yml) configuration
+* Check its configuration
 
 ```
 bundle exec kitchen list
@@ -195,7 +195,7 @@ Instance                  Driver   Provisioner  Verifier  Transport  Last Action
 default-tf-plugin-bionic  Vagrant  Shell        Inspec    Ssh        Converged    <None>
 ```
 
-* We are finally able to excecute the tests (defined in test/integration/default/check-plugin.rb)
+* We are finally able to run the tests (defined in test/integration/default/check-plugin.rb)
 
 ```
 bundle exec kitchen verify
@@ -222,9 +222,9 @@ Target:  ssh://vagrant@127.0.0.1:2222
      ✔  owner is expected to eq "vagrant"
      ✔  group is expected to eq "vagrant"
   Command: `terraform init --upgrade=true && terraform apply --auto-approve=true`
-     ✔  stdout is expected to match /testgroup-id = "1001"/
-     ✔  stdout is expected to match /testuser1-id = "1001"/
-     ✔  stdout is expected to match /testuser2-id = "1002"/
+     ✔  stdout is expected to match /testgroup-id = "100[0-9]"/
+     ✔  stdout is expected to match /testuser1-id = "100[0-9]"/
+     ✔  stdout is expected to match /testuser2-id = "100[0-9]"/
 
 Test Summary: 9 successful, 0 failures, 0 skipped
        Finished verifying <default-tf-plugin-bionic> (0m7.41s).
